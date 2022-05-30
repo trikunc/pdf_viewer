@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import { singleFileUpload, multipleFilesUpload } from '../data/api';
+import { singleFileUpload } from '../data/api';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 
 const FileUploadScreen = (props) => {
  const [singleFile, setSingleFile] = useState('');
- const [multipleFiles, setMultipleFiles] = useState('');
- const [title, setTitle] = useState('');
  const [singleProgress, setSingleProgress] = useState(0);
- const [multipleProgress, setMultipleProgress] = useState(0);
 
  const SingleFileChange = (e) => {
   setSingleFile(e.target.files[0]);
   setSingleProgress(0);
  }
- const MultipleFileChange = (e) => {
-  setMultipleFiles(e.target.files);
-  setMultipleProgress(0);
- }
+
  const singleFileOptions = {
   onUploadProgress: (progressEvent) => {
    const { loaded, total } = progressEvent;
@@ -26,28 +20,14 @@ const FileUploadScreen = (props) => {
    setSingleProgress(percentage);
   }
  }
- const mulitpleFileOptions = {
-  onUploadProgress: (progressEvent) => {
-   const { loaded, total } = progressEvent;
-   const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
-   setMultipleProgress(percentage);
-  }
- }
+
  const uploadSingleFile = async () => {
   const formData = new FormData();
   formData.append('file', singleFile);
   await singleFileUpload(formData, singleFileOptions);
   props.getsingle();
  }
- const UploadMultipleFiles = async () => {
-  const formData = new FormData();
-  formData.append('title', title);
-  for (let i = 0; i < multipleFiles.length; i++) {
-   formData.append('files', multipleFiles[i]);
-  }
-  await multipleFilesUpload(formData, mulitpleFileOptions);
-  props.getMultiple();
- }
+
  return (
   <div className="flex flex-row  w-[60%]">
    <div className="p-10 w-[100%] flex flex-row justify-between">

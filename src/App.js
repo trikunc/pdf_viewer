@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import FileUploadScreen from './screens/FileUploadScreen';
 import { getSingleFiles, getMultipleFiles } from './data/api';
@@ -22,7 +22,7 @@ function App() {
       console.log(error);
     }
   }
-  const getMultipleFilesList = async () => {
+  const getMultipleFilesList = useCallback(async () => {
     try {
       const fileslist = await getMultipleFiles();
       setMultipleFiles(fileslist);
@@ -30,11 +30,11 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  })
   useEffect(() => {
     getSingleFileslist();
     getMultipleFilesList();
-  }, []);
+  }, [getMultipleFilesList]);
 
   console.log(singleFiles)
   return (
